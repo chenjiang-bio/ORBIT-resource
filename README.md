@@ -1,4 +1,4 @@
-# ORBIT Organoid Resource
+# ORBIT Resource
 
 Source code and analysis workflows for ORBIT, a sample-level organoid knowledge resource linking experimental context with molecular evidence across 80 organs and 38 species.
 
