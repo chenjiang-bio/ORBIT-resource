@@ -9,7 +9,7 @@ not on its fold change but on how strongly its functional annotations match the
 pathway background enriched in organoid models under matched conditions, and
 returns a context-calibrated ranking with confidence grades.
 
-One module of the [ORBIT organoid resource](https://github.com/chenjiang-bio/ORBIT-resource). Also available through
+One module of the [ORBIT Organoid Resource](https://github.com/chenjiang-bio/ORBIT-resource). Also available through
 the ORBIT web platform.
 
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://github.com/chenjiang-bio/ORBIT-resource/tree/main/signature-prioritization)
