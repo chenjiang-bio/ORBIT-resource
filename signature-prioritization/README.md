@@ -298,10 +298,6 @@ pytest -q
 R is not required. Tests needing the downloaded background skip themselves when
 it is absent.
 
-## Citation
-
-Jiang, C., Long, X.-Y., Luo, Y.-F., et al. ORBIT: transforming dispersed
-organoid data into a computable knowledge resource.
 
 ## License
 
