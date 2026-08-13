@@ -2,7 +2,7 @@
 
 Build, load and query the sample-centric organoid knowledge graph used by ORBIT.
 
-One module of the [ORBIT organoid resource](https://github.com/chenjiang-bio/ORBIT-resource). The live graph powers the portal assistant, Skills follow-up and the manuscript case studies (e.g. `KM-14955`).
+One module of the [ORBIT Resource](https://github.com/chenjiang-bio/ORBIT-resource). The live graph powers the portal assistant, Skills follow-up and the manuscript case studies (e.g. `KM-14955`).
 
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://github.com/chenjiang-bio/ORBIT-resource/tree/main/knowledge-graph)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](../LICENSE)
