@@ -1,0 +1,66 @@
+{
+  "_description": "Offline fixtures for the KM-14955 Prader-Willi joint LLM+KG notebook. Counts match the 2026-08-07 ORBIT KG build / Data S5 trace.",
+  "sample_neighbourhood": {
+    "cypher": "MATCH (s:Sample {sample_id:'KM-14955'})-[r]->(x) RETURN type(r) AS rel, count(*) AS n ORDER BY n DESC;",
+    "rows": [
+      {"rel": "HAS_GROUP_INFO", "n": 44},
+      {"rel": "HAS_BIOMARKER", "n": 22},
+      {"rel": "HAS_PHENOTYPE", "n": 4},
+      {"rel": "USES_FACTOR", "n": 3},
+      {"rel": "HAS_OMICS", "n": 2}
+    ]
+  },
+  "phenotypes": {
+    "cypher": "MATCH (s:Sample {sample_id:'KM-14955'})-[:HAS_PHENOTYPE]->(p:Phenotype) RETURN p.id AS node, p.name AS phenotype;",
+    "rows": [
+      {
+        "node": "phn_5d2f6364",
+        "phenotype": "PWS ARCOs exhibit increased fractions of KI67+ proliferating cells and NESTIN+ neural progenitors with reduced DCX+ and NeuN+ neurons compared with controls."
+      },
+      {
+        "node": "phn_3eb07f89",
+        "phenotype": "PWS ARCOs are significantly larger in projected area than control ARCOs at 40 and 70 DIV."
+      }
+    ]
+  },
+  "dlk1_markers": {
+    "cypher": "MATCH (s:Sample {sample_id:'KM-14955'})-[:HAS_GROUP_INFO]->(g:GroupInfo)-[:HAS_CLUSTER_MARKER]->(c:ClusterMarkers) WHERE toUpper(coalesce(c.symbol, c.name, '')) = 'DLK1' RETURN count(DISTINCT g) AS groups, count(DISTINCT c) AS marker_nodes, count(*) AS edges;",
+    "rows": [{"groups": 8, "marker_nodes": 34, "edges": 34}]
+  },
+  "radial_glia_markers": {
+    "cypher": "MATCH (g:GroupInfo {GSE_ID:'GSE164102'})-[:HAS_CLUSTER_MARKER]->(c:ClusterMarkers) WHERE c.cluster = 'Radial glial cells' RETURN DISTINCT toUpper(coalesce(c.symbol, c.name, '')) AS symbol ORDER BY symbol;",
+    "rows": [
+      {"symbol": "ANP32E"}, {"symbol": "B2M"}, {"symbol": "C1ORF61"}, {"symbol": "CALR"},
+      {"symbol": "CD63"}, {"symbol": "CENPF"}, {"symbol": "CLU"}, {"symbol": "DLK1"},
+      {"symbol": "EDNRB"}, {"symbol": "FOS"}, {"symbol": "FTL"}, {"symbol": "GNG5"},
+      {"symbol": "GPC3"}, {"symbol": "GPM6B"}, {"symbol": "GSTP1"}, {"symbol": "HIST1H4C"},
+      {"symbol": "HLA-A"}, {"symbol": "HMGB2"}, {"symbol": "HSP90B1"}, {"symbol": "HSPA5"},
+      {"symbol": "ID2"}, {"symbol": "ID3"}, {"symbol": "MDK"}, {"symbol": "MEST"},
+      {"symbol": "MGST1"}, {"symbol": "NES"}, {"symbol": "NPC2"}, {"symbol": "NTRK2"},
+      {"symbol": "NUSAP1"}, {"symbol": "PLP1"}, {"symbol": "PON2"}, {"symbol": "PRDX6"},
+      {"symbol": "PTPRZ1"}, {"symbol": "PTTG1"}, {"symbol": "QKI"}, {"symbol": "SAT1"},
+      {"symbol": "SERF2"}, {"symbol": "SFRP1"}, {"symbol": "SMC4"}, {"symbol": "SPARC"},
+      {"symbol": "SPARCL1"}, {"symbol": "SPON1"}, {"symbol": "SQSTM1"}, {"symbol": "TCEAL9"},
+      {"symbol": "TOP2A"}, {"symbol": "VIM"}
+    ]
+  },
+  "dlk1_annotation": {
+    "cypher": "MATCH (s:Sample {sample_id:'KM-14955'})-[:HAS_GROUP_INFO]->(g:GroupInfo)-[:HAS_CLUSTER_MARKER]->(c:ClusterMarkers)-[:HAS_GENE_ANNOTATION]->(a:GeneAnnotation) WHERE toUpper(coalesce(c.symbol, c.name, '')) = 'DLK1' RETURN DISTINCT a.gene_annotation_entrez_id AS entrez, a.gene_annotation_gene_name AS gene_name, a.organism_species AS species, size(a.string_rows) AS string_partners, size(a.crispick_rows) AS crispick_designs;",
+    "rows": [
+      {
+        "entrez": "8788",
+        "gene_name": "delta like non-canonical Notch ligand 1",
+        "species": "human",
+        "string_partners": 50,
+        "crispick_designs": 68,
+        "top_string_partners": [
+          {"symbol": "DIO3", "score": 924},
+          {"symbol": "RTL1", "score": 920},
+          {"symbol": "IGF2", "score": 916},
+          {"symbol": "NOTCH1", "score": 852},
+          {"symbol": "PLAGL1", "score": 800}
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+neo4j>=5.14
+python-dotenv>=1.0
+PyMySQL>=1.1
+jupyter>=1.0
+ipykernel>=6.0
+pandas>=2.0
+openai>=1.30
+pytest>=7.0

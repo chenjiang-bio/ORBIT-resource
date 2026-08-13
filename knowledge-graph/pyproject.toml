@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "orbit-kg"
+version = "0.1.0"
+description = "ORBIT organoid knowledge-graph build utilities and query helpers"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "ORBIT contributors" }]
+dependencies = [
+  "neo4j>=5.14",
+  "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+mysql = ["PyMySQL>=1.1"]
+notebook = ["jupyter>=1.0", "ipykernel>=6.0", "pandas>=2.0"]
+llm = ["openai>=1.30"]
+dev = ["pytest>=7.0"]
+
+[project.urls]
+Homepage = "https://github.com/chenjiang-bio/ORBIT-organoid-resource"
+Repository = "https://github.com/chenjiang-bio/ORBIT-organoid-resource/tree/main/knowledge-graph"
+
+[tool.setuptools.packages.find]
+include = ["orbit_kg*"]

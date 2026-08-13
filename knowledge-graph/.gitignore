@@ -1,0 +1,33 @@
+# Local graph builds and database dumps (too large for git)
+output/
+outputs/
+data/*.sqlite
+data/*.db
+*.sqlite
+*.db
+neo4j_csv/
+loadcsv/
+
+# Credentials and local env
+.env
+.env.*
+!.env.example
+credentials.json
+*_creds.json
+
+# Python / notebooks
+__pycache__/
+*.py[cod]
+.pytest_cache/
+orbit_kg.egg-info/
+.ipynb_checkpoints/
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
