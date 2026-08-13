@@ -9,11 +9,11 @@ not on its fold change but on how strongly its functional annotations match the
 pathway background enriched in organoid models under matched conditions, and
 returns a context-calibrated ranking with confidence grades.
 
-One module of the [ORBIT organoid resource](https://github.com/chenjiang-bio/ORBIT-organoid-resource). Also available through
+One module of the [ORBIT organoid resource](https://github.com/chenjiang-bio/ORBIT-resource). Also available through
 the ORBIT web platform.
 
-[![CI](https://github.com/chenjiang-bio/ORBIT-organoid-resource/actions/workflows/signature-prioritization-ci.yml/badge.svg)](https://github.com/chenjiang-bio/ORBIT-organoid-resource/actions/workflows/signature-prioritization-ci.yml)
-[![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://github.com/chenjiang-bio/ORBIT-organoid-resource/tree/main/signature-prioritization)
+[![CI](https://github.com/chenjiang-bio/ORBIT-resource/actions/workflows/signature-prioritization-ci.yml/badge.svg)](https://github.com/chenjiang-bio/ORBIT-resource/actions/workflows/signature-prioritization-ci.yml)
+[![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://github.com/chenjiang-bio/ORBIT-resource/tree/main/signature-prioritization)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 > OCSP reprioritizes and calibrates candidates within an organoid context. It
@@ -29,8 +29,8 @@ Cloning also gives you `environment.yml`, the example data and the tutorial
 notebook.
 
 ```bash
-git clone https://github.com/chenjiang-bio/ORBIT-organoid-resource.git
-cd ORBIT-organoid-resource/signature-prioritization
+git clone https://github.com/chenjiang-bio/ORBIT-resource.git
+cd ORBIT-resource/signature-prioritization
 
 conda env create -f environment.yml   # Python deps + R + Bioconductor
 conda activate orbit-ocsp
@@ -59,7 +59,7 @@ Note that `environment.yml` is **not** in the wheel — conda has to run before
 the package exists — so fetch it directly if you did not clone:
 
 ```bash
-curl -O https://raw.githubusercontent.com/chenjiang-bio/ORBIT-organoid-resource/main/signature-prioritization/environment.yml
+curl -O https://raw.githubusercontent.com/chenjiang-bio/ORBIT-resource/main/signature-prioritization/environment.yml
 ```
 
 </details>
@@ -78,7 +78,7 @@ networks. Three ways around it:
 
 ```bash
 # Any downloader, or a browser, or a colleague's copy:
-curl -LO https://github.com/chenjiang-bio/ORBIT-organoid-resource/releases/download/ocsp-data-v0.1.0/orbit-ocsp-data-hsa-0.1.1.tar.gz
+curl -LO https://github.com/chenjiang-bio/ORBIT-resource/releases/download/ocsp-data-v0.1.0/orbit-ocsp-data-hsa-0.1.1.tar.gz
 
 mkdir -p ~/ocsp-data && tar xzf orbit-ocsp-data-hsa-0.1.1.tar.gz -C ~/ocsp-data
 export ORBIT_OCSP_DATA=~/ocsp-data/data
@@ -114,7 +114,7 @@ set, the bundle is extracted there rather than into `~/.orbit_ocsp/data`.
 the ORBIT resource repository, hence the `#subdirectory=` fragment:
 
 ```bash
-pip install "orbit-ocsp @ git+https://github.com/chenjiang-bio/ORBIT-organoid-resource.git#subdirectory=signature-prioritization"
+pip install "orbit-ocsp @ git+https://github.com/chenjiang-bio/ORBIT-resource.git#subdirectory=signature-prioritization"
 ```
 
 **For development**, add the dev extra to the clone above:
@@ -259,7 +259,7 @@ Key columns: `biomarker_rank`, `verdict` (`enriched` / `depleted` /
 ## Try it
 
 ```bash
-git clone https://github.com/chenjiang-bio/ORBIT-organoid-resource/tree/main/signature-prioritization.git && cd orbit-ocsp
+git clone https://github.com/chenjiang-bio/ORBIT-resource/tree/main/signature-prioritization.git && cd orbit-ocsp
 pip install -e ".[dev]"
 
 orbit-ocsp --mode genes --genes-file examples/data/genes/genes.txt \

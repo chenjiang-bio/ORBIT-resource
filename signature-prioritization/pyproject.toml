@@ -36,10 +36,10 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/chenjiang-bio/ORBIT-organoid-resource/tree/main/signature-prioritization"
-Documentation = "https://github.com/chenjiang-bio/ORBIT-organoid-resource/tree/main/signature-prioritization#readme"
-Repository = "https://github.com/chenjiang-bio/ORBIT-organoid-resource"
-Issues = "https://github.com/chenjiang-bio/ORBIT-organoid-resource/issues"
+Homepage = "https://github.com/chenjiang-bio/ORBIT-resource/tree/main/signature-prioritization"
+Documentation = "https://github.com/chenjiang-bio/ORBIT-resource/tree/main/signature-prioritization#readme"
+Repository = "https://github.com/chenjiang-bio/ORBIT-resource"
+Issues = "https://github.com/chenjiang-bio/ORBIT-resource/issues"
 
 [project.optional-dependencies]
 notebook = ["jupyter>=1.0.0", "ipykernel>=6.0.0"]

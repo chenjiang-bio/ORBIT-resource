@@ -34,7 +34,7 @@ SpeciesBundle = Literal["hsa", "mmu", "full"]
 
 DEFAULT_RELEASE_BASE = os.environ.get(
     "ORBIT_OCSP_DATA_BASE_URL",
-    f"https://github.com/chenjiang-bio/ORBIT-organoid-resource/releases/download/ocsp-data-v{DATA_VERSION}",
+    f"https://github.com/chenjiang-bio/ORBIT-resource/releases/download/ocsp-data-v{DATA_VERSION}",
 )
 
 SHARED_PATHS: tuple[str, ...] = (

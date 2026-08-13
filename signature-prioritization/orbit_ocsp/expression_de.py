@@ -8,12 +8,16 @@ Default backend is R (``R/run_de.R``), with sample-size–aware engine selection
   - ``rnaseq_count`` → DESeq2
   - ``microarray`` / ``normalized`` → limma
 
-``data_type`` is declared by the caller, so
-:func:`check_data_type_against_matrix` compares it against the matrix values
-before dispatch. A mismatch is not cosmetic: ``data_type`` also decides whether
-counts are TMM/logCPM-normalized ahead of the Wilcoxon path, and on the
-un-normalized branch ``log2FoldChange`` holds a difference of raw per-group
-means rather than a log2 ratio.
+``data_type`` may be omitted: :func:`infer_data_type` / :func:`resolve_data_type`
+pick it from the matrix scale (raw counts → ``rnaseq_count``, negatives →
+``microarray``, otherwise ``normalized``). When a caller still declares a type
+that conflicts with an obvious count matrix, ``resolve_data_type`` overrides to
+``rnaseq_count`` by default so DE does not silently treat count differences as
+log2 fold-changes.
+
+``data_type`` still decides whether counts are TMM/logCPM-normalized ahead of
+the Wilcoxon path, and on the un-normalized branch ``log2FoldChange`` holds a
+difference of raw per-group means rather than a log2 ratio.
 
 ``backend="mock"`` remains available for deterministic unit tests.
 """
@@ -121,6 +125,68 @@ def describe_matrix_scale(matrix: pd.DataFrame) -> MatrixScale:
     )
 
 
+def infer_data_type(
+    matrix: pd.DataFrame,
+    scale: Optional[MatrixScale] = None,
+) -> str:
+    """Guess ``data_type`` from matrix values alone.
+
+    Heuristics (same evidence as :func:`describe_matrix_scale`):
+
+    - looks like raw counts → ``rnaseq_count``
+    - any negatives → ``microarray`` (log-scale / log-ratio style)
+    - otherwise → ``normalized`` (FPKM/TPM/CPM-like, non-negative continuous)
+    """
+    scale = scale or describe_matrix_scale(matrix)
+    if scale.looks_like_counts:
+        return "rnaseq_count"
+    if scale.has_negative:
+        return "microarray"
+    return "normalized"
+
+
+def resolve_data_type(
+    matrix: pd.DataFrame,
+    data_type: Optional[str] = None,
+    *,
+    auto_correct_counts: bool = True,
+    strict: bool = True,
+) -> Tuple[str, MatrixScale]:
+    """Return the effective ``data_type`` and the matrix scale used to decide.
+
+    - ``data_type is None`` / blank → :func:`infer_data_type`
+    - declared ``normalized``/``microarray`` on an obvious count matrix →
+      override to ``rnaseq_count`` when ``auto_correct_counts`` (default),
+      because the non-count branch would emit raw mean differences as
+      ``log2FoldChange``
+    - declared ``rnaseq_count`` on non-count values → still raises (or warns
+      if ``strict=False``) via :func:`check_data_type_against_matrix`
+    """
+    scale = describe_matrix_scale(matrix)
+    if data_type is None or not str(data_type).strip():
+        inferred = infer_data_type(matrix, scale=scale)
+        return inferred, scale
+
+    dtype = normalize_data_type(data_type)
+    if (
+        auto_correct_counts
+        and scale.looks_like_counts
+        and dtype != "rnaseq_count"
+    ):
+        warnings.warn(
+            f"data_type={dtype!r} was declared, but the matrix looks like raw "
+            f"counts ({scale.describe()}). Overriding to data_type="
+            f"'rnaseq_count' so count DE engines run and log2FoldChange stays a "
+            f"log2 ratio. Set auto_correct_counts=False to keep {dtype!r}.",
+            UserWarning,
+            stacklevel=2,
+        )
+        dtype = "rnaseq_count"
+
+    check_data_type_against_matrix(matrix, dtype, strict=strict)
+    return dtype, scale
+
+
 def check_data_type_against_matrix(
     matrix: pd.DataFrame,
     data_type: str,
@@ -136,11 +202,9 @@ def check_data_type_against_matrix(
     Wilcoxon testing assumes library-size scaling.
 
     ``microarray``/``normalized`` declared for data that looks like raw counts
-    warns rather than raises, because the declaration may be deliberate and the
-    evidence is circumstantial. It matters because that branch skips
-    normalization entirely and reports ``log2FoldChange`` as a difference of
-    raw per-group means, which is not a log2 ratio, so a ``--abs-log2fc-min``
-    cutoff silently stops meaning "at least this fold change".
+    warns rather than raises when called directly. Prefer
+    :func:`resolve_data_type`, which overrides such mismatches to
+    ``rnaseq_count`` by default.
 
     Set ``strict=False`` to downgrade the raising case to a warning.
     """
