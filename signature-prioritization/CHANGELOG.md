@@ -67,7 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deployment
 
 OCSP is published as the `signature-prioritization/` module of
-[chenjiang-bio/ORBIT-organoid-resource](https://github.com/chenjiang-bio/ORBIT-organoid-resource),
+[chenjiang-bio/ORBIT-resource](https://github.com/chenjiang-bio/ORBIT-resource),
 alongside the other ORBIT modules, rather than as a standalone repository. The
 release build now resolves this automatically:
 

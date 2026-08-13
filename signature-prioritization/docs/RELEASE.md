@@ -7,7 +7,7 @@ repository, and optionally to PyPI.
 
 OCSP ships as one subdirectory of the paper's resource monorepo:
 
-- Repository: <https://github.com/chenjiang-bio/ORBIT-organoid-resource>
+- Repository: <https://github.com/chenjiang-bio/ORBIT-resource>
 - Subdirectory: `signature-prioritization/`
 - Default branch: `main`
 
@@ -75,9 +75,9 @@ built files into a clone instead, so none of this history travels.
 ```bash
 python scripts/build_release_tree.py --dest ../orbit-ocsp
 
-git clone git@github.com:chenjiang-bio/ORBIT-organoid-resource.git
-cp -R ../orbit-ocsp/ ORBIT-organoid-resource/signature-prioritization/
-cd ORBIT-organoid-resource
+git clone git@github.com:chenjiang-bio/ORBIT-resource.git
+cp -R ../orbit-ocsp/ ORBIT-resource/signature-prioritization/
+cd ORBIT-resource
 git switch -c add-signature-prioritization
 git add signature-prioritization
 git commit -m "Add OCSP context-guided signature prioritization module"
@@ -127,7 +127,7 @@ Create a Release tagged `ocsp-data-v0.1.0` and upload the tarballs. The download
 URL is built from `DEFAULT_RELEASE_BASE` in `orbit_ocsp/data_manager.py`:
 
 ```text
-https://github.com/chenjiang-bio/ORBIT-organoid-resource/releases/download/ocsp-data-v<version>/orbit-ocsp-data-<species>-<version>.tar.gz
+https://github.com/chenjiang-bio/ORBIT-resource/releases/download/ocsp-data-v<version>/orbit-ocsp-data-<species>-<version>.tar.gz
 ```
 
 Users override it with `ORBIT_OCSP_DATA_BASE_URL` if they mirror the data.
@@ -214,7 +214,7 @@ Users can also install straight from the repository without PyPI, which is worth
 stating in the README because the subdirectory makes the command less obvious:
 
 ```bash
-pip install "orbit-ocsp @ git+https://github.com/chenjiang-bio/ORBIT-organoid-resource.git#subdirectory=signature-prioritization"
+pip install "orbit-ocsp @ git+https://github.com/chenjiang-bio/ORBIT-resource.git#subdirectory=signature-prioritization"
 ```
 
 ### conda
