@@ -1,0 +1,5 @@
+group1	group2	tissue_type
+MGE_WT	MGE_WT_JQ1	Brain
+MGE_R113C	MGE_R133C_JQ1	Brain
+CO_WT	CO_WT_JQ1	Brain
+CO_R133C	CO_R113C_JQ1	Brain

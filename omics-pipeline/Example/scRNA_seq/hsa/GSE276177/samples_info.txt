@@ -1,0 +1,6 @@
+ID	Sample	Source	Group
+1	GSM8492626	GSM8492626_margin_rep1	margin
+2	GSM8492628	GSM8492628_tumor_rep1	tumor
+3	GSM8492630	GSM8492630_margin_rep2	margin
+4	GSM8492632	GSM8492632_tumor_rep2	tumor
+5	GSM8492634	GSM8492634_tumor_rep3	tumor
