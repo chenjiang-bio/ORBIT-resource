@@ -1,2 +1,0 @@
-group1	group2	tissue_type
-margin	tumor	Brain
