@@ -12,5 +12,5 @@ See [USAGE.md](../USAGE.md) for column requirements and options.
 
 ## Contents
 
-- `samples_info.txt`, `comparisons.txt`, `gse_list*.txt`
+- `samples_info.txt`, `comparisons.txt`
 - expression matrices under each GSE folder / `ExprMatrix/`
