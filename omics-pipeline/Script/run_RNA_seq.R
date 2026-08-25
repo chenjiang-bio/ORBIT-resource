@@ -28,7 +28,7 @@
 # Outputs: work_dir/<organism>/<GSE>/{Treatment}_vs_{Control}/
 # Batch log: work_dir/batch_RNA_seq.log
 #
-# --strict TRUE (default): any GSE failure exits with status 1 (CI-friendly).
+# --strict TRUE (default): any GSE failure exits with status 1.
 #
 # Dependencies:
 #   Rscript Script/install_deps.R --type rna

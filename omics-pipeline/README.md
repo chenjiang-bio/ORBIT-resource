@@ -1,22 +1,22 @@
 # Omics Pipeline
 
-Batch analysis pipelines for public GEO organoid / tissue omics datasets (human and mouse):
+Batch analysis pipelines for public GEO organoid / tissue omics datasets (human, *Homo sapiens*; mouse, *Mus musculus*):
 
 - **Bulk RNA-seq** - upstream (download → align → count) and downstream (DEG → enrichment → GSEA → GSVA)
 - **Microarray** - GEO prepare + limma DEG + enrichment / GSEA / GSVA
 - **scRNA-seq** - Seurat QC / clustering / annotation, optional multi-group DE and pseudobulk enrichment
 
-Species codes: `hsa` (human), `mmu` (mouse).
+Species codes: `hsa` (human, *Homo sapiens*), `mmu` (mouse, *Mus musculus*).
 
-This module is part of [ORBIT](https://github.com/chenjiang-bio/ORBIT-organoid-resource).
+This module is part of [ORBIT-resource](https://github.com/chenjiang-bio/ORBIT-resource).
 
 ## Documentation
 
 
 | Document                                               | Contents                                                  |
 | ------------------------------------------------------ | --------------------------------------------------------- |
-| [OPERATING_INSTRUCTIONS.md](OPERATING_INSTRUCTIONS.md) | Install, references, inputs, and how to run each pipeline |
-| [Example/README.md](Example/README.md)                 | Minimal prepared inputs for smoke tests                   |
+| [USAGE.md](USAGE.md) | Install, references, inputs, and how to run each pipeline |
+| [Example/README.md](Example/README.md)                 | Example inputs                                            |
 | [GeneralFile/README.md](GeneralFile/README.md)         | Annotation and reference data layout                      |
 
 
@@ -49,7 +49,7 @@ Rscript Script/run_scRNA_seq.R \
 ```text
 omics-pipeline/
   Script/        # pipeline entry points and helpers
-  GeneralFile/   # gene sets and annotations (large genomes not in git)
-  Example/       # prepared inputs only (no analysis outputs)
+  GeneralFile/   # gene sets and annotations
+  Example/       # prepared inputs
 ```
 

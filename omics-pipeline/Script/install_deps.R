@@ -18,8 +18,7 @@
 #   --force TRUE           reinstall packages even if already present
 #
 # Notes:
-#   - Default mirrors are TUNA (CRAN) and USTC (Bioconductor); override with
-#     --use_default_repos TRUE if you prefer official hosts.
+#   - Default mirrors: TUNA (CRAN), USTC (Bioconductor). Use --use_default_repos TRUE for official hosts.
 #   - msigdbr is pinned to 7.5.1; Seurat is pinned to 5.2.1 for scRNA.
 #   - Upstream tools (iseq, fastp, hisat2, samtools, featureCounts) are not
 #     installed by this script; use conda or your OS package manager.
@@ -37,7 +36,7 @@ default_bioc_version <- function() {
   "3.18"
 }
 
-# ---- CLI (self-contained; does not require cli_utils) ----
+# ---- CLI ----
 parse_args <- function(args) {
   opts <- list(
     type = "all",

@@ -11,10 +11,10 @@ Scripts resolve this directory as `Script/../GeneralFile` unless you set `--gene
 | `CellMarker/cellMarker_Hs.txt`, `cellMarker_Mm.txt` | RNA-seq, microarray, scRNA |
 | `gene_length_Hs.txt`, `gene_length_Mm.txt` | RNA-seq (TPM) |
 | `GEOMods.R` | Microarray GPL helpers |
-| `scType/` (`ScTypeDB_full.xlsx`, helper `.R`) | scRNA ScType annotation; `tissueType` values are the only allowed source for `--tissue` / `tissue` / `tissue_type` |
+| `scType/` (`ScTypeDB_full.xlsx`, helper `.R`) | scRNA ScType; `tissueType` values for `--tissue` / `tissue` / `tissue_type` |
 | `SingleR/HumanPrimaryCellAtlasData.rds` | scRNA annotation (human) |
 | `SingleR/MouseRNAseqData.rds` | scRNA annotation (mouse) |
 | `ssGSEA/ssGSEA_Hs.rds` | Human ssGSEA (optional; skipped if missing) |
 | `ref_genome/` | Upstream RNA-seq (FASTA, GTF, HISAT2 index) |
 
-Genome FASTA files and HISAT2 indexes are not stored in git. Download FASTA into `ref_genome/` (see [ref_genome/README.md](ref_genome/README.md)), then build indexes before running upstream RNA-seq. See [OPERATING_INSTRUCTIONS.md](../OPERATING_INSTRUCTIONS.md) for default file names and commands.
+Download FASTA into `ref_genome/` ([ref_genome/README.md](ref_genome/README.md)), then build indexes. See [USAGE.md](../USAGE.md) for file names and commands.

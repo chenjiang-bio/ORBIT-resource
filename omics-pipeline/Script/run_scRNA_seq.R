@@ -12,17 +12,15 @@
 #   work_dir/<organism>/<GSE>/   OR   work_dir/<GSE>/
 #     samples_info.txt
 #     comparisons.txt    # optional for mode=single; required for mode=multi
-#     ExprMatrix/        # expression matrices (counts/ still accepted as fallback)
+#     ExprMatrix/        # expression matrices (counts/ also accepted)
 #
 # samples_info.txt (tab-separated; Example columns):
 #   ID       — library / batch index (required for merged 10x barcodes ending in -N)
 #   Sample   — GSM ID (join key for h5 / multi-csv / per-sample 10x folders)
-#   Source   — descriptive sample label written into cell metadata after join;
-#              also used as per-sample column names after regulation in
-#              DEG_significant.csv / GSVA_DEG_significant.csv (pseudobulk)
+#   Source   — sample label in cell metadata; pseudobulk tables use Source as column names after regulation
 #   Group    — condition label used in comparisons
 #   tissue   — optional default ScType tissueType
-# Legacy aliases accepted: orig.ident→ID, new.ident→Sample, group→Group.
+# Aliases: orig.ident→ID, new.ident→Sample, group→Group.
 #
 # comparisons.txt (tab-separated):
 #   Control/Treatment or group1/group2; optional tissue_type (ScType tissueType)
@@ -47,10 +45,8 @@
 #       [--mode auto|single|multi] [--general_file PATH] [--tissue TISSUE] \
 #       [--skip_completed TRUE|FALSE] [--strict TRUE|FALSE]
 #
-# --tissue / comparisons$tissue_type / samples_info$tissue must match a tissueType
-# value in GeneralFile/scType/ScTypeDB_full.xlsx (see README for the current list).
-# Primary source: comparisons.txt column tissue_type (per comparison).
-# Fallbacks: --tissue, then samples_info$tissue; if still empty, ScType is skipped.
+# ScType tissue: comparisons$tissue_type, then --tissue, then samples_info$tissue.
+# Must match a tissueType in GeneralFile/scType/ScTypeDB_full.xlsx.
 #
 # Examples (from repository root):
 #   Rscript Script/run_scRNA_seq.R \
@@ -175,13 +171,6 @@ batch_log(batch_log_file, paste(
   "| resolutions=", paste(perf$resolutions, collapse = ",")
 ))
 
-# ---- Optional GPTCelltype setup (disabled; no secrets) ----
-if (FALSE) {
-  # Enable only when OPENAI_API_KEY is already set in the environment.
-  # library(httr); library(openai); library(GPTCelltype)
-  message("GPTCelltype block is disabled.")
-}
-
 # ---- Packages once ----
 suppressPackageStartupMessages({
   library(AnnotationDbi)
@@ -299,7 +288,7 @@ run_one_gse <- function(gse_id) {
   if (!dir.exists(expr_dir)) {
     alt <- file.path(gse_dir, "counts")
     if (dir.exists(alt)) {
-      message("Using legacy counts/ directory; prefer renaming to ExprMatrix/")
+      message("Using counts/ directory")
       expr_dir <- alt
     }
   }

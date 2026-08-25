@@ -1,19 +1,19 @@
-# Omics Analysis Pipeline Operating Instructions
+# Usage
 
-Batch analysis pipelines for public GEO omics datasets (human / mouse), covering:
+Batch analysis pipelines for public GEO omics datasets (human, *Homo sapiens*; mouse, *Mus musculus*), covering:
 
 - **Bulk RNA-seq** - upstream (download -> align -> count) and downstream (DEG -> enrichment -> GSEA -> GSVA)
 - **Microarray** - GEO prepare + limma DEG + enrichment / GSEA / GSVA
 - **scRNA-seq** - Seurat QC / clustering / annotation, optional multi-group DE and pseudobulk enrichment
 
-Species codes: `hsa` (human), `mmu` (mouse).
+Species codes: `hsa` (human, *Homo sapiens*), `mmu` (mouse, *Mus musculus*).
 
 ## Repository layout
 
 ```text
 omics-pipeline/
   README.md
-  OPERATING_INSTRUCTIONS.md
+  USAGE.md
   Script/
     install_deps.R          # install R / Bioconductor dependencies
     run_rna_upstream.sh     # bulk RNA-seq upstream
@@ -77,7 +77,7 @@ Place shared resources under `GeneralFile/` (paths are resolved relative to `Scr
 | `GEOMods.R` | Microarray GPL helpers |
 | `ref_genome/` | FASTA + GTF; HISAT2 indexes built on demand |
 
-Large genome FASTA files and HISAT2 indexes are not shipped in git (see `.gitignore`). Download the FASTA files locally, then build indexes:
+Download FASTA locally, then build indexes:
 
 ```bash
 bash Script/run_rna_upstream.sh --species hsa --stage build-index
@@ -94,7 +94,7 @@ Genome FASTA download URLs (GENCODE / EBI FTP):
 - Human: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_50/GRCh38.p14.genome.fa.gz
 - Mouse: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M39/GRCm39.genome.fa.gz
 
-See also `GeneralFile/ref_genome/README.md`.
+See `GeneralFile/ref_genome/README.md`.
 
 ## Quick start (examples)
 
@@ -149,7 +149,7 @@ Notes:
 |--------|----------|---------|
 | `Control` or `group1` | yes* | Reference / baseline group |
 | `Treatment` or `group2` | yes* | Contrast group |
-| `tissue_type` | scRNA yes (preferred) | Per-comparison ScType `tissueType`; primary way to set tissue |
+| `tissue_type` | scRNA yes (preferred) | ScType `tissueType` for this comparison |
 | `source` | microarray optional | Extra phenotype column name to subset on |
 
 \* scRNA `mode=single` does not need comparisons; `mode=multi` / `auto` with rows does.
@@ -179,9 +179,9 @@ Accepted aliases for the matrix (first match wins):
 
 Notes:
 
-- Prefer **raw counts**. DESeq2 / edgeR assume count data; do not feed TPM/FPKM/log2 as primary input.
+- Use raw counts. DESeq2 / edgeR expect count data, not TPM/FPKM/log2.
 - Ensembl version suffixes (e.g. `ENSG000001.12`) are stripped; duplicate genes are summed.
-- Biological replicates are strongly recommended. The pipeline selects DESeq2, edgeR, or Wilcoxon according to group sizes and also filters low-count genes.
+- Biological replicates help. The pipeline selects DESeq2, edgeR, or Wilcoxon by group size and filters low-count genes.
 - Upstream `run_rna_upstream.sh` writes `{GSE}.{species}.ExprMatrix.txt` ready for this step.
 
 ---
@@ -205,7 +205,7 @@ Notes:
 
 - Matrix columns must match `samples_info$Sample` (GSM IDs).
 - Duplicate symbols are aggregated by mean.
-- With `--download TRUE` / `--prepare TRUE`, GEO Series Matrix + GPL annotation are used to build `ExprMatrix.txt` and draft meta files. Auto `comparisons.txt` uses a **Control vs each Treatment** template (control-like labels preferred). **Always review auto-generated `comparisons.txt`** before large batches - phenotype text is noisy.
+- With `--download TRUE` / `--prepare TRUE`, GEO Series Matrix + GPL annotation build `ExprMatrix.txt` and draft meta files. Auto `comparisons.txt` uses Control vs each Treatment. Check `comparisons.txt` before large batches.
 - `--force_prepare TRUE` rebuilds meta / ExprMatrix from an existing GEO cache under `work_dir/Data/`.
 
 ---
@@ -233,23 +233,17 @@ Supported layouts under `ExprMatrix/` (detected automatically, first match):
 4. **Multiple csv/txt/tsv** - one matrix file per sample (first column = gene ID; GSM from filename prefix). Mapped to `samples_info$Sample`.
 5. **Single merged csv/txt/tsv** - genes x cells; barcode prefixes (e.g. `CTRL_...`) are mapped via Sample/Source/ID, or control/treatment aliases when needed.
 
-Join key depends on matrix type as above; after joining, cell `Source` / `Sample` / `Group` come from `samples_info`. Example `samples_info.txt` files should be left as-is.
+Join key depends on matrix type; after joining, cell `Source` / `Sample` / `Group` come from `samples_info`.
 
 Notes:
 
 - Gene IDs may be Ensembl / Entrez / Symbol; Ensembl/Entrez are mapped offline to symbols when needed.
 - `--mode auto`: multi if `comparisons.txt` has >=1 row, else single.
-- ScType tissue resolution order:
-  1. `comparisons.txt` -> `tissue_type` (primary; per comparison in multi mode)
-  2. CLI `--tissue`
-  3. `samples_info.txt` -> `tissue`
-  4. If still empty, ScType is skipped (`celltype_scType=Unknown`)
+- ScType tissue: `comparisons.txt` `tissue_type`, then `--tissue`, then `samples_info$tissue`. Empty skips ScType (`celltype_scType=Unknown`).
 
-  Values **must** be a `tissueType` from `GeneralFile/scType/ScTypeDB_full.xlsx` (exact spelling). Current values in the bundled DB:
+  Values must match `GeneralFile/scType/ScTypeDB_full.xlsx` `tissueType` (exact spelling). Bundled DB:
 
   `Adrenal`, `Brain`, `Eye`, `Heart`, `Hippocampus`, `Immune system`, `Intestine`, `Kidney`, `Liver`, `Lung`, `Muscle`, `Pancreas`, `Placenta`, `Spleen`, `Stomach`, `Thymus`
-
-  Invalid names abort the run and print the allowed list. If the Excel file is updated, use the new `tissueType` values from that file.
 - Runs can be long (many resolutions, markers, GSEA plots). Use `--skip_completed TRUE` to resume.
 
 ---
@@ -293,7 +287,7 @@ See `bash Script/run_rna_upstream.sh --help` for threads and custom reference pa
 
 ## Outputs and resuming
 
-Each comparison (or cohort) is written under the GSE folder, typically as `{Treatment}_vs_{Control}/`, including DEG tables, enrichment CSVs, GSEA/GSVA results, and an `.RData` snapshot. A final `_SUCCESS` file is written only after the requested analysis finishes successfully; `--skip_completed TRUE` uses this marker rather than the `.RData` file. Existing output directories created by older versions without `_SUCCESS` are rerun once.
+Each comparison (or cohort) is written under the GSE folder as `{Treatment}_vs_{Control}/` (DEG tables, enrichment, GSEA/GSVA, `.RData`). `_SUCCESS` marks completion; `--skip_completed TRUE` skips reruns.
 
 Batch logs:
 
@@ -301,9 +295,9 @@ Batch logs:
 - `batch_MicroArray.log`
 - `batch_scRNA_seq.log`
 
-The scRNA-seq log records `STAGE START`, `STAGE DONE`, `STAGE ERROR`, and a compact call stack for cohort-level failures.
+The scRNA-seq log records `STAGE START`, `STAGE DONE`, and `STAGE ERROR`.
 
-## Notes for users
+## Options
 
 - Override shared resources with `--general_file /path/to/GeneralFile`.
 - Comparison headers accept `Control`/`Treatment` or `group1`/`group2`.
@@ -313,7 +307,7 @@ The scRNA-seq log records `STAGE START`, `STAGE DONE`, `STAGE ERROR`, and a comp
 - GSVA/ssGSEA `Regulation` is assigned by `P.Value < 0.05`; direction comes from the sign of `logFC`.
 - `--strict TRUE` (default) makes batch runners exit with status 1 if any GSE/comparison failed.
 - **Speed options** (all three pipelines):
-  - `--fast TRUE` - recommended for large batches: skips network PDFs, uses a lightweight `.RData` snapshot, and applies pipeline-specific performance defaults.
+  - `--fast TRUE` - skip network PDFs, lightweight `.RData`, pipeline performance defaults.
   - `--n_workers N` - run up to N GSE IDs **in parallel** using separate Rscript child processes. Example: `--gse_list ids.txt --n_workers 4`.
   - `--max_gsea_plots N` - optional; omit to plot all significant GSEA terms (`0` or `--skip_gsea_plots TRUE` disables plots).
   - `--skip_save_image TRUE` / `--skip_network_plots TRUE`.

@@ -15,6 +15,9 @@ downloads/
 eggs/
 .eggs/
 lib/
+# omics-pipeline R helpers live in Script/lib (Python template would ignore them)
+!omics-pipeline/Script/lib/
+!omics-pipeline/Script/lib/**
 lib64/
 parts/
 sdist/
